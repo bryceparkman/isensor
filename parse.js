@@ -5,7 +5,7 @@ const mathjs = require('mathjs');
 const raw_dataset = [];
 const window_size = 3;
 const timeDiff = 2.78;
-const window_shift = 3;
+const window_shift = 2;
 
 function getSlope(y,x){
     var n = y.length;
@@ -58,7 +58,7 @@ function extract_features(data){
         feature_labels.push(mathjs.mode(labelCol)[0])
         num_windows++;
     }
-    return [feature_data, feature_labels, dataTimeDiff / 1000 / num_windows / window_size];
+    return [feature_data, feature_labels, dataTimeDiff / 1000 / num_windows];
 }
 
 function getMaskTime(labels, mult){
@@ -115,7 +115,7 @@ fs.createReadStream('data.csv')
         const labels = classifyDecisionTree(knn_test_data);
         console.log('Accuracy: ' + 100 * getAccuracy(labels, knn_test_labels).toFixed(2) + '%')
         const m1 = getMaskTime(labels, test_diff)
-        const m2 = getMaskTime(getCol(raw_dataset.slice(parseInt(raw_dataset.length * 0.7)),3),1);
+        const m2 = getMaskTime(getCol(raw_dataset.slice(parseInt(raw_dataset.length * 0.7)),3),timeDiff);
         console.log('Mask wear time prediction: ' + m1.toFixed(2) + ' seconds');
         console.log('Mask wear time actual: ' + m2.toFixed(2) + ' seconds');
         console.log('Mask wear time percent error: '+ (100 * Math.abs(m1 - m2)/m2).toFixed(3) + '%');
